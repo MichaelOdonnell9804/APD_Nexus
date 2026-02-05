@@ -1,10 +1,5 @@
-<<<<<<< HEAD
 {
-  "name": "apd-nexus",
-=======
-﻿{
   "name": "ordina",
->>>>>>> 773c224 (Initial commit)
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -14,37 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "@radix-ui/react-dialog": "^1.0.5",
-    "@radix-ui/react-dropdown-menu": "^2.0.6",
-    "@radix-ui/react-tabs": "^1.0.4",
-    "@radix-ui/react-tooltip": "^1.0.7",
-    "@supabase/ssr": "^0.5.0",
-    "@supabase/supabase-js": "^2.48.1",
-    "class-variance-authority": "^0.7.0",
-    "clsx": "^2.1.1",
-    "date-fns": "^3.6.0",
-    "katex": "^0.16.11",
-    "lucide-react": "^0.475.0",
-    "next": "14.2.5",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
-    "react-markdown": "^9.0.1",
-    "rehype-katex": "^7.0.1",
-    "rehype-highlight": "^7.0.0",
-    "remark-gfm": "^4.0.0",
-    "remark-math": "^6.0.0",
-    "tailwind-merge": "^2.5.2"
-  },
-  "devDependencies": {
-    "@types/node": "20.14.12",
-    "@types/react": "18.3.3",
-    "@types/react-dom": "18.3.0",
-    "autoprefixer": "10.4.20",
-    "postcss": "8.4.45",
-    "tailwindcss": "3.4.10",
-    "typescript": "5.5.4"
-=======
     "@supabase/ssr": "^0.4.0",
     "@supabase/supabase-js": "^2.49.0",
     "class-variance-authority": "^0.7.0",
@@ -65,6 +29,5 @@
     "postcss": "^8.4.45",
     "tailwindcss": "^3.4.11",
     "typescript": "^5.5.4"
->>>>>>> 773c224 (Initial commit)
   }
 }

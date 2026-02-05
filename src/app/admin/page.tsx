@@ -1,4 +1,4 @@
-import { createSupabaseServerClient } from '@/lib/supabase/server';
+﻿import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { requireProfile } from '@/lib/auth';
 import { updateOrgRole } from '@/app/admin/actions';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,7 +8,7 @@ const ROLE_OPTIONS = ['director', 'staff', 'grad', 'undergrad', 'external'];
 
 export default async function AdminPage() {
   const { profile } = await requireProfile();
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   if (profile.org_role !== 'director') {
     return (
@@ -68,3 +68,4 @@ export default async function AdminPage() {
     </div>
   );
 }
+

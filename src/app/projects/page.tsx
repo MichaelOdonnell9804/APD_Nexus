@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { requireProfile } from '@/lib/auth';
 import { isStaffOrDirector } from '@/lib/roles';
@@ -10,7 +10,7 @@ import { createProject } from '@/app/projects/actions';
 
 export default async function ProjectsPage() {
   const { profile } = await requireProfile();
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const { data: projects } = await supabase
     .from('projects')
@@ -73,3 +73,4 @@ export default async function ProjectsPage() {
     </div>
   );
 }
+

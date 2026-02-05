@@ -1,4 +1,4 @@
-'use server';
+﻿'use server';
 
 import { revalidatePath } from 'next/cache';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
@@ -6,7 +6,7 @@ import { requireProfile } from '@/lib/auth';
 
 export async function createTask(formData: FormData) {
   const { profile } = await requireProfile();
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const projectId = String(formData.get('project_id') || '').trim();
   const title = String(formData.get('title') || '').trim();
@@ -33,7 +33,7 @@ export async function createTask(formData: FormData) {
 
 export async function createExperimentLog(formData: FormData) {
   const { profile } = await requireProfile();
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const projectId = String(formData.get('project_id') || '').trim();
   const title = String(formData.get('title') || '').trim();
@@ -66,3 +66,4 @@ export async function createExperimentLog(formData: FormData) {
 
   revalidatePath('/projects');
 }
+

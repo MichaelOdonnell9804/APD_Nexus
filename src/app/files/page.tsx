@@ -1,4 +1,4 @@
-import { createSupabaseServerClient } from '@/lib/supabase/server';
+﻿import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { requireProfile } from '@/lib/auth';
 import { FileUploadDialog } from '@/components/files/file-upload-dialog';
 import { FileRowActions } from '@/components/files/file-row-actions';
@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default async function FilesPage() {
   const { profile } = await requireProfile();
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const { data: files } = await supabase
     .from('files')
@@ -38,7 +38,7 @@ export default async function FilesPage() {
                   <div>
                     <p className="font-medium">{file.name}</p>
                     <p className="text-xs text-muted-foreground">
-                      {file.mime} • {(file.size / 1024).toFixed(1)} KB •{' '}
+                      {file.mime} â€¢ {(file.size / 1024).toFixed(1)} KB â€¢{' '}
                       {new Date(file.created_at).toLocaleString()}
                     </p>
                     <p className="text-xs text-muted-foreground">Tags: {file.tags?.join(', ') || 'none'}</p>
@@ -58,3 +58,4 @@ export default async function FilesPage() {
     </div>
   );
 }
+

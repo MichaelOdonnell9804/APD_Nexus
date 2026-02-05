@@ -1,4 +1,4 @@
-'use server';
+﻿'use server';
 
 import { revalidatePath } from 'next/cache';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
@@ -6,7 +6,7 @@ import { requireProfile } from '@/lib/auth';
 
 export async function createChannel(formData: FormData) {
   const { profile } = await requireProfile();
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const name = String(formData.get('name') || '').trim();
   const projectId = String(formData.get('project_id') || '').trim();
@@ -33,3 +33,4 @@ export async function createChannel(formData: FormData) {
     revalidatePath(`/projects`);
   }
 }
+

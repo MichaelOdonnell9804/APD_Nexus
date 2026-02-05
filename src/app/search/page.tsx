@@ -1,12 +1,13 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { requireProfile } from '@/lib/auth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-export default async function SearchPage({ searchParams }: { searchParams: { q?: string } }) {
-  const query = searchParams.q?.trim();
+export default async function SearchPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
+  const { q } = await searchParams;
+  const query = q?.trim();
   const { profile } = await requireProfile();
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const messageResults = query
     ? await supabase
@@ -126,3 +127,4 @@ export default async function SearchPage({ searchParams }: { searchParams: { q?:
     </div>
   );
 }
+

@@ -1,10 +1,11 @@
 import { AuthForm } from '@/components/auth/auth-form';
 
-export default function LoginPage({
+export default async function LoginPage({
   searchParams
 }: {
-  searchParams: { missing_profile?: string };
+  searchParams: Promise<{ missing_profile?: string }>;
 }) {
+  const { missing_profile } = await searchParams;
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 px-6 py-16 text-white">
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-10">
@@ -27,7 +28,7 @@ export default function LoginPage({
               Access is restricted to approved APD Lab members. Contact the lab director for onboarding.
             </p>
           </div>
-          <AuthForm missingProfile={Boolean(searchParams.missing_profile)} />
+          <AuthForm missingProfile={Boolean(missing_profile)} />
         </div>
       </div>
     </div>

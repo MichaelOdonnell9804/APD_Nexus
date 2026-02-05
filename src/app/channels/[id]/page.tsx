@@ -4,19 +4,22 @@ import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { requireProfile } from '@/lib/auth';
 import { ChannelMessages } from '@/components/chat/channel-messages';
 
-export default async function ChannelPage({ params }: { params: { id: string } }) {
+export default async function ChannelPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const { profile } = await requireProfile();
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const { data: channel } = await supabase
     .from('channels')
     .select('id, name, project_id, projects(slug, title)')
-    .eq('id', params.id)
+    .eq('id', id)
     .single();
 
   if (!channel) {
     notFound();
   }
+
+  const project = Array.isArray(channel.projects) ? channel.projects[0] : channel.projects;
 
   const { data: messages } = await supabase
     .from('messages')
@@ -27,13 +30,18 @@ export default async function ChannelPage({ params }: { params: { id: string } }
     .order('created_at', { ascending: true })
     .limit(50);
 
+  const initialMessages = (messages ?? []).map((message) => ({
+    ...message,
+    profiles: Array.isArray(message.profiles) ? message.profiles[0] ?? null : message.profiles ?? null
+  }));
+
   return (
     <div className="space-y-4">
       <div>
         <p className="text-sm text-muted-foreground">
           {channel.project_id ? (
-            <Link href={`/projects/${channel.projects?.slug}`} className="underline">
-              {channel.projects?.title}
+            <Link href={`/projects/${project?.slug}`} className="underline">
+              {project?.title}
             </Link>
           ) : (
             'Org channel'
@@ -44,7 +52,7 @@ export default async function ChannelPage({ params }: { params: { id: string } }
       <ChannelMessages
         channelId={channel.id}
         currentUserId={profile.user_id}
-        initialMessages={messages ?? []}
+        initialMessages={initialMessages}
       />
     </div>
   );

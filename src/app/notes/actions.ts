@@ -1,4 +1,4 @@
-'use server';
+﻿'use server';
 
 import { revalidatePath } from 'next/cache';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
@@ -6,7 +6,7 @@ import { requireProfile } from '@/lib/auth';
 
 export async function createNote(formData: FormData) {
   const { profile } = await requireProfile();
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const title = String(formData.get('title') || '').trim();
   const content = String(formData.get('content') || '').trim();
@@ -43,7 +43,7 @@ export async function createNote(formData: FormData) {
 
 export async function updateNoteById(noteId: string, content: string) {
   const { profile } = await requireProfile();
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   if (!noteId || !content) {
     throw new Error('Missing note update payload');
@@ -66,3 +66,4 @@ export async function updateNoteById(noteId: string, content: string) {
 
   revalidatePath('/notes');
 }
+

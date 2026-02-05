@@ -3,15 +3,16 @@ import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { requireProfile } from '@/lib/auth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-export default async function ProjectOverviewPage({ params }: { params: { slug: string } }) {
+export default async function ProjectOverviewPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const { profile } = await requireProfile();
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const { data: project } = await supabase
     .from('projects')
     .select('id, slug, title, description, status, created_at, created_by')
     .eq('org_id', profile.org_id)
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .single();
 
   if (!project) {
@@ -23,6 +24,11 @@ export default async function ProjectOverviewPage({ params }: { params: { slug: 
     .select('user_id, project_role, profiles(full_name, avatar_url)')
     .eq('project_id', project.id)
     .order('joined_at', { ascending: true });
+
+  const normalizedMembers = (members ?? []).map((member) => ({
+    ...member,
+    profiles: Array.isArray(member.profiles) ? member.profiles[0] ?? null : member.profiles ?? null
+  }));
 
   return (
     <div className="grid gap-6 lg:grid-cols-3">
@@ -41,8 +47,8 @@ export default async function ProjectOverviewPage({ params }: { params: { slug: 
           <CardTitle>Members</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2 text-sm">
-          {members && members.length > 0 ? (
-            members.map((member) => (
+          {normalizedMembers.length > 0 ? (
+            normalizedMembers.map((member) => (
               <div key={member.user_id} className="flex items-center justify-between">
                 <span>{member.profiles?.full_name || 'Member'}</span>
                 <span className="text-muted-foreground">{member.project_role}</span>

@@ -8,16 +8,17 @@ export default async function ProjectLayout({
   params
 }: {
   children: React.ReactNode;
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
+  const { slug } = await params;
   const { profile } = await requireProfile();
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const { data: project } = await supabase
     .from('projects')
     .select('id, slug, title, description, status')
     .eq('org_id', profile.org_id)
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .single();
 
   if (!project) {

@@ -1,4 +1,4 @@
-'use server';
+﻿'use server';
 
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -14,7 +14,7 @@ function slugify(value: string) {
 
 export async function createProject(formData: FormData) {
   const { profile } = await requireProfile();
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const title = String(formData.get('title') || '').trim();
   const description = String(formData.get('description') || '').trim();
@@ -52,7 +52,7 @@ export async function createProject(formData: FormData) {
 
 export async function joinProject(projectId: string) {
   const { profile } = await requireProfile();
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const { error } = await supabase.from('project_members').insert({
     project_id: projectId,
@@ -66,3 +66,4 @@ export async function joinProject(projectId: string) {
 
   revalidatePath('/projects');
 }
+

@@ -5,15 +5,16 @@ import { FileUploadDialog } from '@/components/files/file-upload-dialog';
 import { FileRowActions } from '@/components/files/file-row-actions';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-export default async function ProjectFilesPage({ params }: { params: { slug: string } }) {
+export default async function ProjectFilesPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const { profile } = await requireProfile();
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const { data: project } = await supabase
     .from('projects')
     .select('id, slug, title')
     .eq('org_id', profile.org_id)
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .single();
 
   if (!project) {
@@ -59,7 +60,7 @@ export default async function ProjectFilesPage({ params }: { params: { slug: str
                     <FileUploadDialog fileId={file.id} projectId={project.id} />
                   </div>
                 </div>
-              ))
+              ))}
             </div>
           ) : (
             <p className="text-sm text-muted-foreground">No files uploaded yet.</p>

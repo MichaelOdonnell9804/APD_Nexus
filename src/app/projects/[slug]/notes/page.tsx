@@ -13,17 +13,19 @@ export default async function ProjectNotesPage({
   params,
   searchParams
 }: {
-  params: { slug: string };
-  searchParams: { note?: string };
+  params: Promise<{ slug: string }>;
+  searchParams: Promise<{ note?: string }>;
 }) {
+  const { slug } = await params;
+  const { note } = await searchParams;
   const { profile } = await requireProfile();
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const { data: project } = await supabase
     .from('projects')
     .select('id, title')
     .eq('org_id', profile.org_id)
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .single();
 
   if (!project) {
@@ -36,7 +38,7 @@ export default async function ProjectNotesPage({
     .eq('project_id', project.id)
     .order('updated_at', { ascending: false });
 
-  const selectedId = searchParams.note;
+  const selectedId = note;
   const { data: selected } = selectedId
     ? await supabase
         .from('notes')
@@ -71,7 +73,7 @@ export default async function ProjectNotesPage({
               notes.map((note) => (
                 <Link
                   key={note.id}
-                  href={`/projects/${params.slug}/notes?note=${note.id}`}
+                  href={`/projects/${slug}/notes?note=${note.id}`}
                   className={`block rounded-md border p-3 text-sm ${
                     selected?.id === note.id ? 'border-primary' : ''
                   }`}

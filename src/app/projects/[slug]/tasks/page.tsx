@@ -6,15 +6,16 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
-export default async function ProjectTasksPage({ params }: { params: { slug: string } }) {
+export default async function ProjectTasksPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const { profile } = await requireProfile();
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const { data: project } = await supabase
     .from('projects')
     .select('id, title')
     .eq('org_id', profile.org_id)
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .single();
 
   if (!project) {

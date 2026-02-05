@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { requireProfile } from '@/lib/auth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 
 export default async function HomePage() {
   const { profile } = await requireProfile();
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const { data: announcements } = await supabase
     .from('announcements')
@@ -73,7 +73,7 @@ export default async function HomePage() {
                   <div>
                     <p className="font-medium">{item.title}</p>
                     <p className="text-xs text-muted-foreground">
-                      {item.project_id ? 'Project' : 'Org'} • {new Date(item.created_at).toLocaleString()}
+                      {item.project_id ? 'Project' : 'Org'} â€¢ {new Date(item.created_at).toLocaleString()}
                     </p>
                   </div>
                   <Badge variant={item.priority === 'urgent' ? 'default' : 'secondary'}>
@@ -134,3 +134,4 @@ export default async function HomePage() {
     </div>
   );
 }
+

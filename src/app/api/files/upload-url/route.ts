@@ -1,9 +1,9 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 
 export async function POST(request: Request) {
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   const { data: authData } = await supabase.auth.getUser();
   if (!authData.user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -125,3 +125,4 @@ export async function POST(request: Request) {
     signed_url: signed.signedUrl
   });
 }
+

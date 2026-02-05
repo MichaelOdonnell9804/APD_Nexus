@@ -34,8 +34,9 @@ interface ChannelMessagesProps {
 
 export function ChannelMessages({ channelId, currentUserId, initialMessages }: ChannelMessagesProps) {
   const supabase = useMemo(() => createSupabaseBrowserClient(), []);
-  const normalize = (message: MessageItem) => ({
+  const normalize = (message: MessageItem | any): MessageItem => ({
     ...message,
+    profiles: Array.isArray(message.profiles) ? message.profiles[0] ?? null : message.profiles ?? null,
     message_reactions: message.message_reactions ?? []
   });
   const [messages, setMessages] = useState<MessageItem[]>(() => initialMessages.map(normalize));

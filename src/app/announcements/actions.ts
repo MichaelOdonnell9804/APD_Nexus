@@ -1,4 +1,4 @@
-'use server';
+﻿'use server';
 
 import { revalidatePath } from 'next/cache';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
@@ -6,7 +6,7 @@ import { requireProfile } from '@/lib/auth';
 
 export async function createAnnouncement(formData: FormData) {
   const { profile } = await requireProfile();
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const title = String(formData.get('title') || '').trim();
   const body = String(formData.get('body') || '').trim();
@@ -37,7 +37,7 @@ export async function createAnnouncement(formData: FormData) {
 
 export async function markAnnouncementRead(announcementId: string) {
   const { profile } = await requireProfile();
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   await supabase.from('announcement_reads').upsert({
     announcement_id: announcementId,
@@ -47,3 +47,4 @@ export async function markAnnouncementRead(announcementId: string) {
 
   revalidatePath('/announcements');
 }
+

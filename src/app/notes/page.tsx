@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { requireProfile } from '@/lib/auth';
 import { createNote, updateNoteById } from '@/app/notes/actions';
@@ -8,9 +8,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { NoteEditor } from '@/components/notes/note-editor';
 
-export default async function NotesPage({ searchParams }: { searchParams: { note?: string } }) {
+export default async function NotesPage({ searchParams }: { searchParams: Promise<{ note?: string }> }) {
+  const { note } = await searchParams;
   const { profile } = await requireProfile();
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const { data: notes } = await supabase
     .from('notes')
@@ -19,7 +20,7 @@ export default async function NotesPage({ searchParams }: { searchParams: { note
     .is('project_id', null)
     .order('updated_at', { ascending: false });
 
-  const selectedId = searchParams.note;
+  const selectedId = note;
   const { data: selected } = selectedId
     ? await supabase
         .from('notes')
@@ -103,7 +104,7 @@ export default async function NotesPage({ searchParams }: { searchParams: { note
             />
             {revisions && revisions.length > 0 ? (
               <div className="text-xs text-muted-foreground">
-                Recent revisions: {revisions.map((rev) => new Date(rev.created_at).toLocaleString()).join(' • ')}
+                Recent revisions: {revisions.map((rev) => new Date(rev.created_at).toLocaleString()).join(' â€¢ ')}
               </div>
             ) : null}
           </CardContent>
@@ -112,3 +113,4 @@ export default async function NotesPage({ searchParams }: { searchParams: { note
     </div>
   );
 }
+

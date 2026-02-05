@@ -1,4 +1,4 @@
-import { createSupabaseServerClient } from '@/lib/supabase/server';
+﻿import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { requireProfile } from '@/lib/auth';
 import { isStaffOrDirector } from '@/lib/roles';
 import { createAnnouncement, markAnnouncementRead } from '@/app/announcements/actions';
@@ -10,7 +10,7 @@ import { Badge } from '@/components/ui/badge';
 
 export default async function AnnouncementsPage() {
   const { profile } = await requireProfile();
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const { data: announcements } = await supabase
     .from('announcements')
@@ -83,7 +83,7 @@ export default async function AnnouncementsPage() {
                   <div>
                     <CardTitle>{announcement.title}</CardTitle>
                     <p className="text-xs text-muted-foreground">
-                      {announcement.project_id ? 'Project' : 'Org'} •{' '}
+                      {announcement.project_id ? 'Project' : 'Org'} â€¢{' '}
                       {new Date(announcement.created_at).toLocaleString()}
                     </p>
                   </div>
@@ -123,3 +123,4 @@ export default async function AnnouncementsPage() {
     </div>
   );
 }
+

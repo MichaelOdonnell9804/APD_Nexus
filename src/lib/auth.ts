@@ -1,8 +1,8 @@
-import { redirect } from 'next/navigation';
+﻿import { redirect } from 'next/navigation';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 
 export async function getUserAndProfile() {
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
   const { data: authData } = await supabase.auth.getUser();
   const user = authData.user;
   if (!user) {
@@ -36,3 +36,4 @@ export async function requireProfile() {
   }
   return { user, profile };
 }
+

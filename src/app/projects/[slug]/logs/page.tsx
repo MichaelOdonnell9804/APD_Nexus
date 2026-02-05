@@ -8,15 +8,16 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Markdown } from '@/components/markdown/markdown';
 
-export default async function ProjectLogsPage({ params }: { params: { slug: string } }) {
+export default async function ProjectLogsPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
   const { profile } = await requireProfile();
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const { data: project } = await supabase
     .from('projects')
     .select('id, title')
     .eq('org_id', profile.org_id)
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .single();
 
   if (!project) {

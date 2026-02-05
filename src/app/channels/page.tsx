@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { requireProfile } from '@/lib/auth';
 import { isStaffOrDirector } from '@/lib/roles';
@@ -9,7 +9,7 @@ import { createChannel } from '@/app/channels/actions';
 
 export default async function OrgChannelsPage() {
   const { profile } = await requireProfile();
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   const { data: channels } = await supabase
     .from('channels')
@@ -56,3 +56,4 @@ export default async function OrgChannelsPage() {
     </div>
   );
 }
+

@@ -1,4 +1,4 @@
-'use server';
+﻿'use server';
 
 import { revalidatePath } from 'next/cache';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
@@ -6,7 +6,7 @@ import { requireProfile } from '@/lib/auth';
 
 export async function updateOrgRole(formData: FormData) {
   const { profile } = await requireProfile();
-  const supabase = createSupabaseServerClient();
+  const supabase = await createSupabaseServerClient();
 
   if (profile.org_role !== 'director') {
     throw new Error('Only directors can update roles.');
@@ -30,3 +30,4 @@ export async function updateOrgRole(formData: FormData) {
 
   revalidatePath('/admin');
 }
+
